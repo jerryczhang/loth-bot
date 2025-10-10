@@ -97,6 +97,25 @@ async def pray(
     await ctx.respond(f"Deo Gratias - {hour.title()} prayed", ephemeral=True)
 
 
+missed = bot.create_group(
+    "missed", description="See and reset the number of missed hours"
+)
+
+
+@missed.command(description="See the number of missed hours")
+async def count(ctx: discord.ApplicationContext):
+    missed_hours = controller.get_hours_missed()
+    await ctx.respond(
+        f"{missed_hours} missed hour{'' if missed_hours == 1 else 's'}", ephemeral=True
+    )
+
+
+@missed.command(description="Reset the number of missed hours")
+async def reset(ctx: discord.ApplicationContext):
+    controller.reset_missed_hours()
+    await ctx.respond("Missed hours reset!")
+
+
 @bot.slash_command(name="help", description="Show available commands")
 async def help(ctx: discord.ApplicationContext):
     embed = discord.Embed(

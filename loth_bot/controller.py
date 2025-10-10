@@ -74,6 +74,12 @@ def reset_prayed() -> None:
     compline_prayed = False
 
 
+def reset_missed_hours() -> None:
+    global hours_missed
+
+    hours_missed = 0
+
+
 def get_hours_missed() -> int:
     global hours_missed
 
