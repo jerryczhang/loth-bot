@@ -90,3 +90,7 @@ def get_warn_requirements_callback(
                     continue
 
     return callback
+
+
+async def reset_prayed(_: discord.Bot) -> None:
+    controller.reset_prayed()

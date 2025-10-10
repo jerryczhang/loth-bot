@@ -60,6 +60,20 @@ def check_requirements(
     return missed_requirements
 
 
+def reset_prayed() -> None:
+    global matins_prayed
+    global lauds_prayed
+    global daytime_prayed
+    global vespers_prayed
+    global compline_prayed
+
+    matins_prayed = False
+    lauds_prayed = False
+    daytime_prayed = False
+    vespers_prayed = False
+    compline_prayed = False
+
+
 def get_hours_missed() -> int:
     global hours_missed
 

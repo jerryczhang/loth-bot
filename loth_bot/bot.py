@@ -84,6 +84,7 @@ def _schedule_check_tasks(bot: discord.Bot) -> None:
 async def on_ready():
     _schedule_warning_tasks(bot)
     _schedule_check_tasks(bot)
+    bot.loop.create_task(tasks.schedule_daily(bot, tasks.reset_prayed, time(0, 0)))
     print(f"{bot.user} started.")
 
 
