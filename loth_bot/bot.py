@@ -93,7 +93,7 @@ async def pray(
     ctx: discord.ApplicationContext,
     hour: str = discord.Option(choices=[hour.title() for hour in Hour]),
 ):
-    controller.pray_hour(Hour(hour))
+    controller.pray_hour(Hour(hour.lower()))
     await ctx.respond(f"Deo Gratias - {hour.title()} prayed", ephemeral=True)
 
 
