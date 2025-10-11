@@ -91,7 +91,7 @@ async def on_ready():
 @bot.slash_command(name="pray", description="Pray one of the hours")
 async def pray(
     ctx: discord.ApplicationContext,
-    hour: str = discord.Option(choices=[hour.value for hour in Hour]),
+    hour: str = discord.Option(choices=[hour.title() for hour in Hour]),
 ):
     controller.pray_hour(Hour(hour))
     await ctx.respond(f"Deo Gratias - {hour.title()} prayed", ephemeral=True)

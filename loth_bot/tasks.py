@@ -84,7 +84,7 @@ def get_warn_requirements_callback(
             for channel in guild.text_channels:
                 try:
                     await channel.send(
-                        f"@everyone Warning: {_join_english([r.title() for r in missed_requirements])} pray by {due_time.strftime('%I:%M %p')}"
+                        f"@everyone Warning: pray {_join_english([r.title() for r in missed_requirements])} by {due_time.strftime('%I:%M %p')}"
                     )
                 except discord.errors.Forbidden:
                     continue
