@@ -45,8 +45,11 @@ async def schedule_daily(
     """Run a callback every day at a specific time."""
     await bot.wait_until_ready()
 
+    callback_info = getattr(callback, "requirements", "<No requirements>")
     while not bot.is_closed():
+        print(f"[TASK] callback {callback_info} waiting until {time=} {tzinfo=}")
         await _wait_until(time, tzinfo)
+        print(f"[TASK] calling {callback_info}")
         await callback(bot)
 
 
@@ -64,9 +67,11 @@ def get_check_requirements_callback(
                     await channel.send(
                         f"@everyone {_join_english([r.title() for r in missed_requirements])} missed! Current total missed hours: {controller.get_hours_missed()}"
                     )
+                    print(f"[TASK] Sent missed message to {channel.name}")
                 except discord.errors.Forbidden:
                     continue
 
+    setattr(callback, "requirements", ",".join(requirements))
     return callback
 
 
@@ -86,9 +91,11 @@ def get_warn_requirements_callback(
                     await channel.send(
                         f"@everyone Warning: pray {_join_english([r.title() for r in missed_requirements])} by {due_time.strftime('%I:%M %p')}"
                     )
+                    print(f"[TASK] Sent warning message to {channel.name}")
                 except discord.errors.Forbidden:
                     continue
 
+    setattr(callback, "requirements", ",".join(requirements))
     return callback
 
 

@@ -1,9 +1,11 @@
+import os
 from datetime import date
 from datetime import datetime
 from datetime import time
 from datetime import timedelta
 
 import discord
+from dotenv import load_dotenv
 
 from . import constants
 from . import controller
@@ -82,6 +84,9 @@ def _schedule_check_tasks(bot: discord.Bot) -> None:
 
 @bot.event
 async def on_ready():
+    load_dotenv()
+    initial_missed_hours = os.getenv("INITIAL_MISSED_HOURS", 0)
+    controller.set_missed_hours(initial_missed_hours)
     _schedule_warning_tasks(bot)
     _schedule_check_tasks(bot)
     bot.loop.create_task(tasks.schedule_daily(bot, tasks.reset_prayed, time(0, 0)))
