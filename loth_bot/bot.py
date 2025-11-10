@@ -5,7 +5,6 @@ from datetime import time
 from datetime import timedelta
 
 import discord
-from dotenv import load_dotenv
 
 from . import constants
 from . import controller
@@ -84,9 +83,6 @@ def _schedule_check_tasks(bot: discord.Bot) -> None:
 
 @bot.event
 async def on_ready():
-    load_dotenv()
-    initial_missed_hours = os.getenv("INITIAL_MISSED_HOURS", 0)
-    controller.set_missed_hours(initial_missed_hours)
     _schedule_warning_tasks(bot)
     _schedule_check_tasks(bot)
     bot.loop.create_task(tasks.schedule_daily(bot, tasks.reset_prayed, time(0, 0)))
@@ -103,7 +99,7 @@ async def pray(
 
 
 missed = bot.create_group(
-    "missed", description="See and reset the number of missed hours"
+    "missed", description="See and set the number of missed hours"
 )
 
 
@@ -115,10 +111,10 @@ async def count(ctx: discord.ApplicationContext):
     )
 
 
-@missed.command(description="Reset the number of missed hours")
-async def reset(ctx: discord.ApplicationContext):
-    controller.reset_missed_hours()
-    await ctx.respond("Missed hours reset!")
+@missed.command(description="Set the number of missed hours")
+async def set(ctx: discord.ApplicationContext, hours: int):
+    controller.set_missed_hours(hours)
+    await ctx.respond(f"Missed hours set to {hours}")
 
 
 @bot.slash_command(name="help", description="Show available commands")
