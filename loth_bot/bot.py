@@ -23,9 +23,6 @@ def _schedule_warning_tasks(bot: discord.Bot) -> None:
     lauds_warning = tasks.get_warn_requirements_callback(
         (Requirement.LAUDS,), constants.LAUDS_DEADLINE
     )
-    daytime_warning = tasks.get_warn_requirements_callback(
-        (Requirement.DAYTIME,), constants.DAYTIME_DEADLINE
-    )
     vespers_warning = tasks.get_warn_requirements_callback(
         (Requirement.VESPERS,), constants.VESPERS_DEADLINE
     )
@@ -44,11 +41,6 @@ def _schedule_warning_tasks(bot: discord.Bot) -> None:
         ),
         tasks.schedule_daily(
             bot,
-            daytime_warning,
-            _add_timedelta(constants.DAYTIME_DEADLINE, timedelta(hours=-1)),
-        ),
-        tasks.schedule_daily(
-            bot,
             vespers_warning,
             _add_timedelta(constants.VESPERS_DEADLINE, timedelta(hours=-2)),
         ),
@@ -64,7 +56,6 @@ def _schedule_warning_tasks(bot: discord.Bot) -> None:
 
 def _schedule_check_tasks(bot: discord.Bot) -> None:
     lauds = tasks.get_check_requirements_callback((Requirement.LAUDS,))
-    daytime = tasks.get_check_requirements_callback((Requirement.DAYTIME,))
     vespers = tasks.get_check_requirements_callback((Requirement.VESPERS,))
     compline = tasks.get_check_requirements_callback(
         (
@@ -78,7 +69,6 @@ def _schedule_check_tasks(bot: discord.Bot) -> None:
             lauds,
             constants.LAUDS_DEADLINE,
         ),
-        tasks.schedule_daily(bot, daytime, constants.DAYTIME_DEADLINE),
         tasks.schedule_daily(bot, vespers, constants.VESPERS_DEADLINE),
         tasks.schedule_daily(bot, compline, constants.COMPLINE_DEADLINE),
     ]
