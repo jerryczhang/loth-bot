@@ -1,10 +1,10 @@
-import os
 from datetime import date
 from datetime import datetime
 from datetime import time
 from datetime import timedelta
 
 import discord
+from discord import Option
 
 from . import constants
 from . import controller
@@ -87,7 +87,7 @@ async def on_ready():
 @bot.slash_command(name="pray", description="Pray one of the hours")
 async def pray(
     ctx: discord.ApplicationContext,
-    hour: str = discord.Option(choices=[hour.title() for hour in Hour]),
+    hour: str = Option(choices=[hour.title() for hour in Hour]),
 ):
     controller.pray_hour(Hour(hour.lower()))
     await ctx.respond(f"Deo Gratias - {hour.title()} prayed", ephemeral=True)
@@ -107,9 +107,21 @@ async def count(ctx: discord.ApplicationContext):
 
 
 @missed.command(description="Set the number of missed hours")
-async def set(ctx: discord.ApplicationContext, hours: int):
+async def set(
+    ctx: discord.ApplicationContext,
+    hours: int = Option(int, description="Missed count to set", min_value=0),
+    hour: str = Option(
+        choices=[hour.title() for hour in Hour],
+        description="The hour you prayed if you are fixing the missed count",
+        required=False,
+    ),
+):
     controller.set_missed_hours(hours)
-    await ctx.respond(f"Missed hours set to {hours}")
+    await ctx.respond("Missed count set", ephemeral=True)
+    if hour is not None:
+        await ctx.send(f"{hour} prayed: missed hours set to {hours}")
+    else:
+        await ctx.send(f"Missed hours set to {hours}")
 
 
 @bot.slash_command(name="help", description="Show available commands")
